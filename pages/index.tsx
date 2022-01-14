@@ -1,9 +1,10 @@
 import type { NextPage } from "next";
+import { Banner } from "../components/Banner";
 
 const Home: NextPage = () => {
   return (
-    <div>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
+    <div className="container mx-auto">
+      <Banner />
     </div>
   );
 };
