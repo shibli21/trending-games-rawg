@@ -18,16 +18,11 @@ function classNames(...classes: any[]) {
 const Place: InferGetStaticPropsType<typeof getStaticProps> = (props: any) => {
   const router = useRouter();
   const { game, gameSS, gameDlc, gameTrailers } = props;
-  console.log(props);
-
-  if (router.isFallback) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div className="container mx-auto ">
       <Head>
-        <title>{game.name}</title>
+        <title>{game?.name}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Link href="/">Back to home</Link>
@@ -35,28 +30,27 @@ const Place: InferGetStaticPropsType<typeof getStaticProps> = (props: any) => {
         <Image
           layout="responsive"
           className="object-cover w-full duration-200 ease-in h-60 hover:scale-105"
-          src={game.background_image}
+          src={game?.background_image}
           width={550}
           height={300}
           alt="Sunset in the mountains"
         />
       </div>
       <div className="pt-4">
-        <h1 className="font-sans text-2xl font-semibold ">{game.name}</h1>
+        <h1 className="font-sans text-2xl font-semibold ">{game?.name}</h1>
         <h1 className="font-light text-gray-600">
-          <span>Released</span> {game.released}
+          <span>Released</span> {game?.released}
         </h1>
 
         <div className="grid grid-cols-8  gap-10  px-2 py-16 sm:px-0">
           <div className="col-span-8  lg:col-span-2">
             <div className="p-4 shadow shadow-orange-900 bg-gray-800 ">
-              <DescItem title="Genre" value={getGenres(game.genres)} />
-              <DescItem title="Release" value={moment(game.released).format("DD/MM/YYYY")} />
-              <DescItem title="Company" value={getPublishers(game.publishers)} />
-              <DescItem title="Size" value="14.4GB" />
-              <DescItem title="Age Rating" value={game.esrb_rating.name} />
-              <DescItem title="Platforms" value={getPlatform(game.parent_platforms)} />
-              <DescItem title="Reddit" value={game.reddit_name} />
+              {game?.genres && <DescItem title="Genre" value={getGenres(game.genres)} />}
+              {game?.released && <DescItem title="Release" value={moment(game.released).format("DD/MM/YYYY")} />}
+              {game?.publishers && <DescItem title="Company" value={getPublishers(game.publishers)} />}
+              {game?.esrb_rating?.name && <DescItem title="Age Rating" value={game.esrb_rating?.name} />}
+              {game?.parent_platforms && <DescItem title="Platforms" value={getPlatform(game.parent_platforms)} />}
+              {game?.reddit_name && <DescItem title="Reddit" value={game.reddit_name} />}
             </div>
           </div>
           <div className="col-span-8 s lg:col-span-6">
@@ -65,7 +59,7 @@ const Place: InferGetStaticPropsType<typeof getStaticProps> = (props: any) => {
                 <CustomTab>
                   <div>
                     <h1 className="">Details</h1>
-                    <h1 className=" text-xs">Updated {moment(game.updated).format("DD/MM/YYYY")}</h1>
+                    <h1 className=" text-xs">Updated {moment(game?.updated).format("DD/MM/YYYY")}</h1>
                   </div>
                 </CustomTab>
                 <CustomTab>
@@ -73,7 +67,7 @@ const Place: InferGetStaticPropsType<typeof getStaticProps> = (props: any) => {
                     <h1 className="">Gallery</h1>
                     <div>
                       <h1 className=" text-xs">
-                        {gameSS.count} Images {gameTrailers.count > 0 && ` -  ${gameTrailers.count} Videos`}
+                        {gameSS?.count} Images {gameTrailers?.count > 0 && ` -  ${gameTrailers?.count} Videos`}
                       </h1>
                     </div>
                   </div>
@@ -89,7 +83,7 @@ const Place: InferGetStaticPropsType<typeof getStaticProps> = (props: any) => {
                         <StarIcon className="h-3 w-3 md:h-5  md:w-5 text-yellow-400" />
                         <StarIcon className="h-3 w-3 md:h-5  md:w-5 text-yellow-400" />
                       </div>
-                      <h1 className="text-xs"> ({game.reviews_count})</h1>
+                      <h1 className="text-xs"> ({game?.reviews_count})</h1>
                     </div>
                   </div>
                 </CustomTab>
@@ -97,7 +91,7 @@ const Place: InferGetStaticPropsType<typeof getStaticProps> = (props: any) => {
                   <div>
                     <h1 className="">DLC</h1>
                     <div>
-                      <h1 className="text-xs">{gameDlc.count} expansions </h1>
+                      <h1 className="text-xs">{gameDlc?.count} expansions </h1>
                     </div>
                   </div>
                 </CustomTab>
@@ -107,13 +101,13 @@ const Place: InferGetStaticPropsType<typeof getStaticProps> = (props: any) => {
                   <div
                     className="text-gray-100 mt-4"
                     dangerouslySetInnerHTML={{
-                      __html: props.game.description,
+                      __html: game?.description,
                     }}
                   ></div>
                 </Tab.Panel>
                 <Tab.Panel>
                   <div className="py-5 grid grid-cols-1 lg:grid-cols-2 gap-5">
-                    {gameTrailers &&
+                    {gameTrailers?.results &&
                       gameTrailers.results.map((trailer: any) => {
                         return (
                           <video
@@ -127,39 +121,41 @@ const Place: InferGetStaticPropsType<typeof getStaticProps> = (props: any) => {
                         );
                       })}
 
-                    {gameSS.results.map((gameSS: any) => (
-                      <Image
-                        key={gameSS.id}
-                        src={gameSS.image}
-                        alt={gameSS.image}
-                        layout="responsive"
-                        className="object-cover w-full duration-200 ease-in h-60 hover:scale-105"
-                        width={550}
-                        height={300}
-                        placeholder="blur"
-                        blurDataURL={`/_next/image?url=${gameSS.image}&w=16&q=1`}
-                      />
-                    ))}
+                    {gameSS?.results &&
+                      gameSS.results.map((gameSS: any) => (
+                        <Image
+                          key={gameSS.id}
+                          src={gameSS.image}
+                          alt={gameSS.image}
+                          layout="responsive"
+                          className="object-cover w-full duration-200 ease-in h-60 hover:scale-105"
+                          width={550}
+                          height={300}
+                          placeholder="blur"
+                          blurDataURL={`/_next/image?url=${gameSS.image}&w=16&q=1`}
+                        />
+                      ))}
                   </div>
                 </Tab.Panel>
                 <Tab.Panel>Content 2</Tab.Panel>
                 <Tab.Panel>
                   <div className="py-5 grid grid-cols-2 gap-5">
-                    {gameDlc.results.map((game: any) => (
-                      <div key={game.id}>
-                        {game.background_image && (
-                          <Image
-                            layout="responsive"
-                            className=" object-cover w-full duration-200 ease-in h-60 hover:scale-105"
-                            src={game.background_image}
-                            width={550}
-                            height={300}
-                            alt="Sunset in the mountains"
-                          />
-                        )}
-                        <h1 className="mt-1">{game.name}</h1>
-                      </div>
-                    ))}
+                    {gameDlc?.results &&
+                      gameDlc.results.map((game: any) => (
+                        <div key={game.id}>
+                          {game.background_image && (
+                            <Image
+                              layout="responsive"
+                              className=" object-cover w-full duration-200 ease-in h-60 hover:scale-105"
+                              src={game.background_image}
+                              width={550}
+                              height={300}
+                              alt="Sunset in the mountains"
+                            />
+                          )}
+                          <h1 className="mt-1">{game?.name}</h1>
+                        </div>
+                      ))}
                   </div>
                 </Tab.Panel>
               </Tab.Panels>
