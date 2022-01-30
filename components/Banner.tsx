@@ -1,9 +1,14 @@
-import React from "react";
+import { ArrowRightIcon } from "@heroicons/react/solid";
+import React, { useContext, useState } from "react";
+import { SearchContext } from "../pages/_app";
 import Button from "./Button";
 
 interface Props {}
 
 export const Banner = (props: Props) => {
+  const { update } = useContext(SearchContext);
+  const [searchQuery, setSearchQuery] = useState("");
+
   return (
     <div className="py-0 md:py-4 lg:py-10 grid grid-cols-1  md:grid-cols-1 lg:grid-cols-2 items-end">
       <div className="">
@@ -12,33 +17,28 @@ export const Banner = (props: Props) => {
         </h2>
         <p className="mt-2 text-lg italic font-semibold  sm:text-3xl">Discover the best games in the world</p>
       </div>
-      <div className="flex gap-3 my-5 h-[40px] justify-end ">
+      <form className="flex gap-3 my-5 h-[40px] justify-end ">
         <input
-          type="text"
-          id="search"
+          type="search"
           className=" bg-gray-50 border-4 lg:max-w-[300px]  border-orange-500 text-gray-900 text-sm  block w-full p-2.5 focus:outline-none"
           required
+          value={searchQuery}
+          onChange={(e) => {
+            e.preventDefault();
+            setSearchQuery(e.target.value);
+          }}
         />
         <Button
-          icon={
-            <svg
-              className="w-5 h-5 ml-2 -mr-1"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-          }
-          isLoading={true}
+          icon={<ArrowRightIcon className="h-5 w-5" />}
+          type="submit"
+          onClick={() => {
+            update(searchQuery);
+            setSearchQuery("");
+          }}
         >
           Search
         </Button>
-      </div>
+      </form>
     </div>
   );
 };

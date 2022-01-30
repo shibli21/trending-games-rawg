@@ -1,20 +1,28 @@
 import type { GetStaticProps, InferGetStaticPropsType } from "next";
 import Head from "next/head";
+import { useContext } from "react";
 import { Banner } from "../components/Banner";
+import Container from "../components/Container";
 import GameCard from "../components/GameCard";
 import { fetchGames } from "../lib/game";
+import { SearchContext } from "./_app";
 
 const Home: InferGetStaticPropsType<typeof getStaticProps> = (props: { games: { results: any[] } }) => {
-  console.log(props.games);
+  const { state } = useContext(SearchContext);
 
   return (
-    <div className="container mx-auto">
+    <Container>
       <Head>
         <title>TRENDING</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
         <Banner />
+        {state && (
+          <h1 className="text-2xl">
+            Search result for <span className="text-orange-500">{state}</span>
+          </h1>
+        )}
         <div className="grid    lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-2 gap-5">
           {props.games &&
             props.games.results?.map((game: any) => (
@@ -30,7 +38,7 @@ const Home: InferGetStaticPropsType<typeof getStaticProps> = (props: { games: { 
             ))}
         </div>
       </main>
-    </div>
+    </Container>
   );
 };
 

@@ -1,5 +1,5 @@
 import { Tab } from "@headlessui/react";
-import { StarIcon } from "@heroicons/react/solid";
+import { StarIcon, ArrowLeftIcon } from "@heroicons/react/solid";
 import moment from "moment";
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import Head from "next/head";
@@ -7,6 +7,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
+import Button from "../../components/Button";
+import Container from "../../components/Container";
 import { getGenres, getPlatform, getPublishers } from "../../lib/formatter";
 import { fetchGameDetails, fetchGameDLC, fetchGames, fetchGameSS, fetchGameTrailer } from "../../lib/game";
 
@@ -20,21 +22,25 @@ const Place: InferGetStaticPropsType<typeof getStaticProps> = (props: any) => {
   const { game, gameSS, gameDlc, gameTrailers } = props;
 
   return (
-    <div className="container mx-auto ">
+    <Container>
       <Head>
         <title>{game?.name}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Link href="/">Back to home</Link>
+      {/* <Link href="/">
+        <ArrowLeftIcon className="h-10 w-10 text-orange-700" />
+      </Link> */}
       <div className="container rounded-xl">
-        <Image
-          layout="responsive"
-          className="object-cover w-full duration-200 ease-in h-60 hover:scale-105"
-          src={game?.background_image}
-          width={550}
-          height={300}
-          alt="Sunset in the mountains"
-        />
+        <div className="shadow shadow-orange-700">
+          <Image
+            layout="responsive"
+            className=" object-cover w-full duration-200 ease-in h-60 hover:scale-105"
+            src={game?.background_image}
+            width={550}
+            height={300}
+            alt="Sunset in the mountains"
+          />
+        </div>
       </div>
       <div className="pt-4">
         <h1 className="font-sans text-2xl font-semibold ">{game?.name}</h1>
@@ -163,7 +169,7 @@ const Place: InferGetStaticPropsType<typeof getStaticProps> = (props: any) => {
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 
