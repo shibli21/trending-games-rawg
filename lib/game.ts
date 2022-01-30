@@ -1,4 +1,5 @@
 const baseUrl = "https://api.rawg.io/api/"
+
 const currentYear = new Date().getFullYear()
 const dayAndMonth = (type: string) => {
     let value: any
@@ -13,6 +14,7 @@ const dayAndMonth = (type: string) => {
         return value
     }
 }
+
 const currentMonth = dayAndMonth("month")
 const currentDay = dayAndMonth("day")
 const currentDate = `${currentYear}-${currentMonth}-${currentDay}`
@@ -37,17 +39,7 @@ export const gameScreenshots = (id: any) => baseUrl + `games/${id}/screenshots`
 
 
 export const fetchGames = async () => {
-
-    const options = {
-        method: "GET",
-        headers: {
-            Accept: "application/json",
-            Authorization: `${process.env.NEXT_PUBLIC_API_KEY}`
-
-        },
-    };
-
-    const res = await fetch(`https://api.rawg.io/api/games?dates=${lastYear},${currentDate}&ordering=rating_count&page_size=16&key=${process.env.NEXT_PUBLIC_API_KEY}`, options);
+    const res = await fetch(`https://api.rawg.io/api/games?dates=${lastYear},${currentDate}&ordering=rating_count&page_size=16&key=${process.env.NEXT_PUBLIC_API_KEY}`);
     const games: any = await res.json();
 
 
@@ -55,69 +47,32 @@ export const fetchGames = async () => {
 }
 
 export const fetchGameDetails = async (id: string) => {
-    const options = {
-        method: "GET",
-        headers: {
-            Accept: "application/json",
-            Authorization: `${process.env.NEXT_PUBLIC_AUTH}`
-
-        },
-    };
-
-    const res = await fetch(`https://api.rawg.io/api/games/${id}?key=${process.env.NEXT_PUBLIC_API_KEY}`, options);
+    const res = await fetch(`https://api.rawg.io/api/games/${id}?key=${process.env.NEXT_PUBLIC_API_KEY}`);
     const game: any = await res.json();
-
 
     return game;
 }
 
 export const fetchGameSS = async (id: string) => {
-    const options = {
-        method: "GET",
-        headers: {
-            Accept: "application/json",
-            Authorization: `${process.env.NEXT_PUBLIC_AUTH}`
+    const res = await fetch(`https://api.rawg.io/api/games/${id}/screenshots?key=${process.env.NEXT_PUBLIC_API_KEY}`);
+    const gameSS: any = await res.json();
 
-        },
-    };
-
-    const res = await fetch(`https://api.rawg.io/api/games/${id}/screenshots?key=${process.env.NEXT_PUBLIC_API_KEY}`, options);
-    const game: any = await res.json();
-
-
-    return game;
+    return gameSS;
 }
 
 export const fetchGameDLC = async (id: string) => {
-    const options = {
-        method: "GET",
-        headers: {
-            Accept: "application/json",
-            Authorization: `${process.env.NEXT_PUBLIC_AUTH}`
 
-        },
-    };
-
-    const res = await fetch(`https://api.rawg.io/api/games/${id}/additions?key=${process.env.NEXT_PUBLIC_API_KEY}`, options);
-    const game: any = await res.json();
+    const res = await fetch(`https://api.rawg.io/api/games/${id}/additions?key=${process.env.NEXT_PUBLIC_API_KEY}`);
+    const gameDlc: any = await res.json();
 
 
-    return game;
+    return gameDlc;
 }
 
 export const fetchGameTrailer = async (id: string) => {
-    const options = {
-        method: "GET",
-        headers: {
-            Accept: "application/json",
-            Authorization: `${process.env.NEXT_PUBLIC_AUTH}`
-
-        },
-    };
-
-    const res = await fetch(`https://api.rawg.io/api/games/${id}/movies?key=${process.env.NEXT_PUBLIC_API_KEY}`, options);
-    const game: any = await res.json();
+    const res = await fetch(`https://api.rawg.io/api/games/${id}/movies?key=${process.env.NEXT_PUBLIC_API_KEY}`);
+    const gameTrailers: any = await res.json();
 
 
-    return game;
+    return gameTrailers;
 }

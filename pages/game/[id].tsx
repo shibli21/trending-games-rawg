@@ -1,14 +1,14 @@
-import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import React, { FC, useState } from "react";
-import { fetchGameDetails, fetchGameDLC, fetchGames, fetchGameSS, fetchGameTrailer } from "../../lib/game";
 import { Tab } from "@headlessui/react";
 import { StarIcon } from "@heroicons/react/solid";
 import moment from "moment";
+import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import Head from "next/head";
-import ReactPlayer from "react-player";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React from "react";
+import { getGenres, getPlatform, getPublishers } from "../../lib/formatter";
+import { fetchGameDetails, fetchGameDLC, fetchGames, fetchGameSS, fetchGameTrailer } from "../../lib/game";
 
 interface Props {}
 function classNames(...classes: any[]) {
@@ -19,6 +19,10 @@ const Place: InferGetStaticPropsType<typeof getStaticProps> = (props: any) => {
   const router = useRouter();
   const { game, gameSS, gameDlc, gameTrailers } = props;
   console.log(props);
+
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="container mx-auto ">
@@ -168,34 +172,6 @@ const Place: InferGetStaticPropsType<typeof getStaticProps> = (props: any) => {
 };
 
 export default Place;
-
-const getGenres = (genre) => {
-  let genres = [];
-
-  genre.forEach((p) => {
-    genres.push(p.name);
-  });
-
-  return genres.join(", ");
-};
-const getPublishers = (publisher) => {
-  let publishers = [];
-
-  publisher.forEach((p) => {
-    publishers.push(p.name);
-  });
-
-  return publishers.join(", ");
-};
-const getPlatform = (platforms) => {
-  let platformss = [];
-
-  platforms.forEach((platform) => {
-    platformss.push(platform.platform.name);
-  });
-
-  return platformss.join(", ");
-};
 
 interface DescItemProps {
   title: string;
