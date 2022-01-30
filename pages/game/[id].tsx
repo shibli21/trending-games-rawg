@@ -27,9 +27,11 @@ const Place: InferGetStaticPropsType<typeof getStaticProps> = (props: any) => {
         <title>{game?.name}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {/* <Link href="/">
-        <ArrowLeftIcon className="h-10 w-10 text-orange-700" />
-      </Link> */}
+      <div className="py-2">
+        <Link href="/" passHref>
+          <ArrowLeftIcon className=" h-8 cursor-pointer w-8 text-orange-700" />
+        </Link>
+      </div>
       <div className="container rounded-xl">
         <div className="shadow shadow-orange-700">
           <Image
@@ -37,8 +39,8 @@ const Place: InferGetStaticPropsType<typeof getStaticProps> = (props: any) => {
             className=" object-cover w-full duration-200 ease-in h-60 hover:scale-105"
             src={game?.background_image}
             width={550}
-            height={300}
-            alt="Sunset in the mountains"
+            height={250}
+            alt={game?.background_image}
           />
         </div>
       </div>
@@ -48,7 +50,7 @@ const Place: InferGetStaticPropsType<typeof getStaticProps> = (props: any) => {
           <span>Released</span> {game?.released}
         </h1>
 
-        <div className="grid grid-cols-8  gap-10  px-2 py-16 sm:px-0">
+        <div className="grid grid-cols-8  gap-10  px-2 py-4 md:py-16 sm:px-0">
           <div className="col-span-8  lg:col-span-2">
             <div className="p-4 shadow shadow-orange-900 bg-gray-800 ">
               {game?.genres && <DescItem title="Genre" value={getGenres(game.genres)} />}
