@@ -6,13 +6,11 @@ interface Props {}
 export const Banner = (props: Props) => {
   return (
     <div className="">
-      <div className=" px-4  py-12 text-start sm:px-6 lg:py-16 lg:px-8">
-        <h2 className="transform px-4 py-2 mt-20  -skew-x-12 bg-purple-200 inline-block text-6xl font-extrabold text-gray-700 sm:text-8xl">
-          <span className=" ">Coffind</span>
+      <div className="py-12 text-start lg:py-16">
+        <h2 className="inline-block px-4 py-2 mt-20 text-6xl font-extrabold  transform -skew-x-12 bg-orange-500  sm:text-8xl">
+          <span className="uppercase">Trending</span>
         </h2>
-        <p className="mt-2 text-lg sm:text-3xl italic text-gray-600 font-semibold">
-          Discover the best coffee shops in your area . . .
-        </p>
+        <p className="mt-2 text-lg italic font-semibold  sm:text-3xl">Discover the best games in the world</p>
 
         <div className="pt-10">
           <Button
