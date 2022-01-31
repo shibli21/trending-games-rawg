@@ -11,10 +11,10 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <link rel="preload" href="/fonts/IBMPlexSans-Bold.ttf" as="fonts" />
-          <link rel="preload" href="/fonts/IBMPlexSans-Medium.ttf" as="fonts" />
-          <link rel="preload" href="/fonts/IBMPlexSans-Regular.ttf" as="fonts" />
-          <link rel="preload" href="/fonts/IBMPlexSans-SemiBold.ttf" as="fonts" />
+          <link rel="preload" href="/fonts/Poppins-Bold.ttf" as="font" />
+          <link rel="preload" href="/fonts/Poppins-Medium.ttf" as="font" />
+          <link rel="preload" href="/fonts/Poppins-Regular.ttf" as="font" />
+          <link rel="preload" href="/fonts/Poppins-SemiBold.ttf" as="font" />
         </Head>
         <body>
           <Main />
