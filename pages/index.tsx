@@ -6,6 +6,7 @@ import Container from "../components/Container";
 import GameCard from "../components/GameCard";
 import { fetchGames, fetchSearchedGames } from "../lib/game";
 import { GamesContext, Types } from "../store/games-context";
+import { XIcon } from "@heroicons/react/solid";
 
 const Home: InferGetStaticPropsType<typeof getStaticProps> = (props: { games: { results: any[] } }) => {
   const { state, dispatch } = useContext(GamesContext);
@@ -32,8 +33,19 @@ const Home: InferGetStaticPropsType<typeof getStaticProps> = (props: { games: { 
         <Banner />
         {state.searchQuery && state.games && (
           <div>
-            <h1 className="text-2xl mb-10">
-              Search results for <span className="text-orange-500">{state.searchQuery}</span>
+            <h1 className="text-2xl mb-10 flex items-center gap-2">
+              Search results for <span className=" text-orange-500">{state.searchQuery}</span>
+              <XIcon
+                className="h-6 w-6 text-orange-500 cursor-pointer"
+                onClick={() =>
+                  dispatch({
+                    payload: {
+                      searchQuery: "",
+                    },
+                    type: Types.SEARCH_QUERY,
+                  })
+                }
+              />
             </h1>
             {isLoading ? (
               <div className="flex justify-center my-10 h-10">
