@@ -1,7 +1,7 @@
 import { Tab } from "@headlessui/react";
 import { ArrowLeftIcon, StarIcon } from "@heroicons/react/solid";
 import moment from "moment";
-import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,21 +9,14 @@ import { useRouter } from "next/router";
 import React from "react";
 import Container from "../../components/Container";
 import { getGenres, getPlatform, getPublishers } from "../../lib/formatter";
-import {
-  fetchGameDetails,
-  fetchGameDLC,
-  fetchGameReviews,
-  fetchGames,
-  fetchGameSS,
-  fetchGameTrailer,
-} from "../../lib/game";
+import { fetchGameDetails, fetchGameDLC, fetchGameReviews, fetchGameSS, fetchGameTrailer } from "../../lib/game";
 
 interface Props {}
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-const Game: InferGetStaticPropsType<typeof getStaticProps> = (props: any) => {
+const Game: InferGetServerSidePropsType<typeof getServerSideProps> = (props: any) => {
   const router = useRouter();
   const { game, gameSS, gameDlc, gameTrailers, gameGameReviews } = props;
 
@@ -265,7 +258,7 @@ const CustomTab: React.FC<CustomTabProps> = ({ children, isDisabled }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   let game;
   let gameSS;
   let gameDlc;
@@ -288,20 +281,5 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       gameTrailers,
       gameGameReviews,
     },
-  };
-};
-
-export const getStaticPaths: GetStaticPaths = async (context) => {
-  const games = await fetchGames();
-
-  const paths = games.results.map((game: any) => ({
-    params: {
-      id: game.id.toString(),
-    },
-  }));
-
-  return {
-    paths,
-    fallback: true,
   };
 };
