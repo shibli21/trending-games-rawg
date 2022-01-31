@@ -10,7 +10,14 @@ import React from "react";
 import Button from "../../components/Button";
 import Container from "../../components/Container";
 import { getGenres, getPlatform, getPublishers } from "../../lib/formatter";
-import { fetchGameDetails, fetchGameDLC, fetchGames, fetchGameSS, fetchGameTrailer } from "../../lib/game";
+import {
+  fetchGameDetails,
+  fetchGameDLC,
+  fetchGameReviews,
+  fetchGames,
+  fetchGameSS,
+  fetchGameTrailer,
+} from "../../lib/game";
 
 interface Props {}
 function classNames(...classes: any[]) {
@@ -19,7 +26,7 @@ function classNames(...classes: any[]) {
 
 const Place: InferGetStaticPropsType<typeof getStaticProps> = (props: any) => {
   const router = useRouter();
-  const { game, gameSS, gameDlc, gameTrailers } = props;
+  const { game, gameSS, gameDlc, gameTrailers, gameGameReviews } = props;
 
   return (
     <Container>
@@ -63,7 +70,7 @@ const Place: InferGetStaticPropsType<typeof getStaticProps> = (props: any) => {
           </div>
           <div className="col-span-8 s lg:col-span-6">
             <Tab.Group>
-              <Tab.List className="flex rounded-xl">
+              <Tab.List className="flex rounded-xl ">
                 <CustomTab>
                   <div>
                     <h1 className="">Details</h1>
@@ -80,7 +87,7 @@ const Place: InferGetStaticPropsType<typeof getStaticProps> = (props: any) => {
                     </div>
                   </div>
                 </CustomTab>
-                <CustomTab isDisabled>
+                <CustomTab>
                   <div>
                     <h1 className="">Reviews</h1>
                     <div className="flex items-center gap-1">
@@ -107,14 +114,14 @@ const Place: InferGetStaticPropsType<typeof getStaticProps> = (props: any) => {
               <Tab.Panels>
                 <Tab.Panel>
                   <div
-                    className="text-gray-100 mt-4"
+                    className="text-gray-100 pt-4"
                     dangerouslySetInnerHTML={{
                       __html: game?.description,
                     }}
                   ></div>
                 </Tab.Panel>
                 <Tab.Panel>
-                  <div className="py-5 grid grid-cols-1 lg:grid-cols-2 gap-5">
+                  <div className="py-5 grid grid-cols-1 lg:grid-cols-2 gap-5 ">
                     {gameTrailers?.results &&
                       gameTrailers.results.map((trailer: any) => {
                         return (
@@ -145,7 +152,52 @@ const Place: InferGetStaticPropsType<typeof getStaticProps> = (props: any) => {
                       ))}
                   </div>
                 </Tab.Panel>
-                <Tab.Panel>Content 2</Tab.Panel>
+                <Tab.Panel>
+                  {gameGameReviews?.results.map((gameReview: any) => {
+                    return (
+                      <div key={gameReview?.id} className="p-4 shadow shadow-orange-900 ">
+                        <div className="flex justify-between">
+                          <div className="flex gap-2">
+                            {gameReview?.user?.avatar && (
+                              <div className="h-10 w-10">
+                                <Image
+                                  src={gameReview?.user.avatar}
+                                  alt={gameReview?.user.avatar}
+                                  layout="responsive"
+                                  className="h-10 w-10  object-cover"
+                                  width={50}
+                                  height={50}
+                                  placeholder="blur"
+                                  blurDataURL={`/_next/image?url=${gameReview?.user.avatar}&w=16&q=1`}
+                                />
+                              </div>
+                            )}
+                            <div>
+                              <h1 className="font-light text-gray-600">{gameReview?.user?.username}</h1>
+                              <div className="flex items-center gap-1">
+                                <div className="flex gap-0.5">
+                                  <StarIcon className="h-3 w-3 md:h-5  md:w-5 text-yellow-400" />
+                                  <StarIcon className="h-3 w-3 md:h-5  md:w-5 text-yellow-400" />
+                                  <StarIcon className="h-3 w-3 md:h-5  md:w-5 text-yellow-400" />
+                                  <StarIcon className="h-3 w-3 md:h-5  md:w-5 text-yellow-400" />
+                                  <StarIcon className="h-3 w-3 md:h-5  md:w-5 text-yellow-400" />
+                                </div>
+                                <h1 className="text-xs"> ({gameReview?.rating})</h1>
+                              </div>
+                            </div>
+                          </div>
+                          <h1>{moment(gameReview?.created).startOf("minute").fromNow()}</h1>
+                        </div>
+                        <div
+                          className="text-gray-100 mt-4"
+                          dangerouslySetInnerHTML={{
+                            __html: gameReview?.text,
+                          }}
+                        ></div>
+                      </div>
+                    );
+                  })}
+                </Tab.Panel>
                 <Tab.Panel>
                   <div className="py-5 grid grid-cols-2 gap-5">
                     {gameDlc?.results &&
@@ -202,7 +254,7 @@ const CustomTab: React.FC<CustomTabProps> = ({ children, isDisabled }) => {
       disabled={isDisabled}
       className={({ selected }) =>
         classNames(
-          "w-full py-2.5 text-md font-semibold leading-5  text-left  right-0",
+          "w-full  py-2.5 text-md font-semibold leading-5  text-left  right-0",
           selected ? " border-b-2  border-b-orange-400  text-orange-400" : "border-b-2 "
         )
       }
@@ -217,12 +269,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   let gameSS;
   let gameDlc;
   let gameTrailers;
+  let gameGameReviews;
 
   if (params && params.id) {
     game = await fetchGameDetails(params.id.toString());
     gameSS = await fetchGameSS(params.id.toString());
     gameDlc = await fetchGameDLC(params.id.toString());
     gameTrailers = await fetchGameTrailer(params.id.toString());
+    gameGameReviews = await fetchGameReviews(params.id.toString());
   }
 
   return {
@@ -231,6 +285,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       gameSS,
       gameDlc,
       gameTrailers,
+      gameGameReviews,
     },
   };
 };

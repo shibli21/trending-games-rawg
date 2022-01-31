@@ -76,3 +76,11 @@ export const fetchGameTrailer = async (id: string) => {
 
     return gameTrailers;
 }
+
+export const fetchGameReviews = async (id: string) => {
+    const res = await fetch(`https://api.rawg.io/api/games/${id}/reviews?key=${process.env.NEXT_PUBLIC_API_KEY}`);
+    const gameReviews: any = await res.json();
+
+
+    return gameReviews;
+}
