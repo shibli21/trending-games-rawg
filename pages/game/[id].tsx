@@ -41,14 +41,16 @@ const Place: InferGetStaticPropsType<typeof getStaticProps> = (props: any) => {
       </div>
       <div className="container rounded-xl">
         <div className="shadow shadow-orange-700">
-          <Image
-            layout="responsive"
-            className=" object-cover w-full duration-200 ease-in h-60 hover:scale-105"
-            src={game?.background_image}
-            width={550}
-            height={250}
-            alt={game?.background_image}
-          />
+          {game?.background_image && (
+            <Image
+              layout="responsive"
+              className=" object-cover w-full duration-200 ease-in h-60 hover:scale-105"
+              src={game?.background_image}
+              width={550}
+              height={250}
+              alt={game?.background_image}
+            />
+          )}
         </div>
       </div>
       <div className="pt-4">

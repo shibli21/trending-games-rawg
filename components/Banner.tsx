@@ -17,20 +17,24 @@ export const Banner = (props: Props) => {
         </h2>
         <p className="mt-2 text-lg italic font-semibold  sm:text-3xl">Discover the best games in the world</p>
       </div>
-      <form className="flex gap-3 my-5 h-[40px] justify-end ">
+      <div className="flex gap-3 my-5 h-[40px] justify-end ">
         <input
           type="search"
           className=" bg-gray-50 border-4 lg:max-w-[300px]  border-orange-500 text-gray-900 text-sm  block w-full p-2.5 focus:outline-none"
-          required
           value={searchQuery}
           onChange={(e) => {
             e.preventDefault();
             setSearchQuery(e.target.value);
           }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              update(searchQuery);
+              setSearchQuery("");
+            }
+          }}
         />
         <Button
           icon={<ArrowRightIcon className="h-5 w-5" />}
-          type="submit"
           onClick={() => {
             update(searchQuery);
             setSearchQuery("");
@@ -38,7 +42,7 @@ export const Banner = (props: Props) => {
         >
           Search
         </Button>
-      </form>
+      </div>
     </div>
   );
 };
