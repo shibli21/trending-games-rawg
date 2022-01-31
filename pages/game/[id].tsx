@@ -1,13 +1,12 @@
 import { Tab } from "@headlessui/react";
-import { StarIcon, ArrowLeftIcon } from "@heroicons/react/solid";
+import { ArrowLeftIcon, StarIcon } from "@heroicons/react/solid";
 import moment from "moment";
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useContext } from "react";
-import Button from "../../components/Button";
+import React from "react";
 import Container from "../../components/Container";
 import { getGenres, getPlatform, getPublishers } from "../../lib/formatter";
 import {
@@ -18,7 +17,6 @@ import {
   fetchGameSS,
   fetchGameTrailer,
 } from "../../lib/game";
-import { GamesContext } from "../../store/games-context";
 
 interface Props {}
 function classNames(...classes: any[]) {
@@ -273,7 +271,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   let gameDlc;
   let gameTrailers;
   let gameGameReviews;
-  let findGameById;
 
   if (params && params.id) {
     game = await fetchGameDetails(params.id.toString());
