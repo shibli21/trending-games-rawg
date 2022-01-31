@@ -1,15 +1,24 @@
 import { Tab } from "@headlessui/react";
-import { ArrowLeftIcon, StarIcon } from "@heroicons/react/solid";
+import { StarIcon, ArrowLeftIcon } from "@heroicons/react/solid";
 import moment from "moment";
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useContext } from "react";
+import Button from "../../components/Button";
 import Container from "../../components/Container";
 import { getGenres, getPlatform, getPublishers } from "../../lib/formatter";
-import { fetchGameDLC, fetchGameReviews, fetchGames, fetchGameSS, fetchGameTrailer } from "../../lib/game";
+import {
+  fetchGameDetails,
+  fetchGameDLC,
+  fetchGameReviews,
+  fetchGames,
+  fetchGameSS,
+  fetchGameTrailer,
+} from "../../lib/game";
+import { GamesContext } from "../../store/games-context";
 
 interface Props {}
 function classNames(...classes: any[]) {
@@ -264,16 +273,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   let gameDlc;
   let gameTrailers;
   let gameGameReviews;
+  let findGameById;
 
   if (params && params.id) {
+    game = await fetchGameDetails(params.id.toString());
     gameSS = await fetchGameSS(params.id.toString());
     gameDlc = await fetchGameDLC(params.id.toString());
     gameTrailers = await fetchGameTrailer(params.id.toString());
     gameGameReviews = await fetchGameReviews(params.id.toString());
-    const games = await fetchGames();
-    game = games.find((game: any) => {
-      return game.id.toString() === params.id; //dynamic id
-    });
   }
 
   return {
