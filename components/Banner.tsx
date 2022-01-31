@@ -1,13 +1,23 @@
 import { ArrowRightIcon } from "@heroicons/react/solid";
 import React, { useContext, useState } from "react";
-import { SearchContext } from "../pages/_app";
+import { GamesContext, Types } from "../store/games-context";
 import Button from "./Button";
 
 interface Props {}
 
 export const Banner = (props: Props) => {
-  const { update } = useContext(SearchContext);
   const [searchQuery, setSearchQuery] = useState("");
+  const { dispatch } = useContext(GamesContext);
+
+  const updateSearchQuery = (searchQuery: string) => {
+    dispatch({
+      type: Types.SEARCH_QUERY,
+      payload: {
+        searchQuery,
+      },
+    });
+    setSearchQuery("");
+  };
 
   return (
     <div className="py-0 md:py-4 lg:py-10 grid grid-cols-1  md:grid-cols-1 lg:grid-cols-2 items-end">
@@ -28,18 +38,11 @@ export const Banner = (props: Props) => {
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
-              update(searchQuery);
-              setSearchQuery("");
+              updateSearchQuery(searchQuery);
             }
           }}
         />
-        <Button
-          icon={<ArrowRightIcon className="h-5 w-5" />}
-          onClick={() => {
-            update(searchQuery);
-            setSearchQuery("");
-          }}
-        >
+        <Button icon={<ArrowRightIcon className="h-5 w-5" />} onClick={() => updateSearchQuery(searchQuery)}>
           Search
         </Button>
       </div>

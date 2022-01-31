@@ -5,22 +5,22 @@ import { Banner } from "../components/Banner";
 import Container from "../components/Container";
 import GameCard from "../components/GameCard";
 import { fetchGames, fetchSearchedGames } from "../lib/game";
-import { SearchContext } from "./_app";
+import { GamesContext, Types } from "../store/games-context";
 
 const Home: InferGetStaticPropsType<typeof getStaticProps> = (props: { games: { results: any[] } }) => {
-  const { state } = useContext(SearchContext);
-  const [searchedGames, setSearchedGames] = useState<any>([]);
+  const { state, dispatch } = useContext(GamesContext);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setIsLoading(true);
-    if (state) {
-      fetchSearchedGames(state).then((res) => {
-        setSearchedGames(res);
-        setIsLoading(false);
+    fetchSearchedGames(state.searchQuery).then((res) => {
+      dispatch({
+        payload: res.results,
+        type: Types.SET_GAMES,
       });
-    }
-  }, [state]);
+      setIsLoading(false);
+    });
+  }, [dispatch, state.searchQuery]);
 
   return (
     <Container>
@@ -30,10 +30,10 @@ const Home: InferGetStaticPropsType<typeof getStaticProps> = (props: { games: { 
       </Head>
       <main>
         <Banner />
-        {state && searchedGames && (
+        {state.searchQuery && state.games && (
           <div>
             <h1 className="text-2xl mb-10">
-              Search result for <span className="text-orange-500">{state}</span>
+              Search results for <span className="text-orange-500">{state.searchQuery}</span>
             </h1>
             {isLoading ? (
               <div className="flex justify-center my-10 h-10">
@@ -41,18 +41,17 @@ const Home: InferGetStaticPropsType<typeof getStaticProps> = (props: { games: { 
               </div>
             ) : (
               <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-2 gap-5 mb-20 ">
-                {searchedGames &&
-                  searchedGames.results?.map((game: any) => (
-                    <GameCard
-                      key={game.id}
-                      id={game.id}
-                      name={game.name}
-                      genres={game.genres}
-                      rating={game.rating}
-                      slug={game.slug}
-                      imgUrl={game.background_image}
-                    />
-                  ))}
+                {state.games.map((game: any) => (
+                  <GameCard
+                    key={game.id}
+                    id={game.id}
+                    name={game.name}
+                    genres={game.genres}
+                    rating={game.rating}
+                    slug={game.slug}
+                    imgUrl={game.background_image}
+                  />
+                ))}
               </div>
             )}
           </div>
